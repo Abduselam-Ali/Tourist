@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import {BrowserRouter as Router, Redirect, Switch} from 'react-router-dom';
+import { Route } from 'react-router-dom/cjs/react-router-dom.min';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Users from './user/pages/Users';
+import Auth from './user/pages/Auth';
+import NewPlace from './places/pages/NewPlace';
+import UserPlaces from './places/pages/UserPlaces';
+import UpdatePlace from './places/pages/UpdatePlace';
+import MainNavigation from './shared/components/Navigation/MainNavigation';
+function App () {
+  return <Router>
+        <MainNavigation />
+        <main>
+        <Switch>
+            <Route path="/" exact>
+                <Users />
+            </Route>
+            <Route path='/:userId/places' exact>
+                <UserPlaces />
+            </Route>
+            <Route path="/places/new" exact>
+                <NewPlace />
+            </Route>
+            <Route path="/places/:placeId" exact>
+                <UpdatePlace />
+            </Route>
+            <Route path="/auth">
+                <Auth />
+            </Route>
+            <Redirect to ="/" />
+            </Switch>
+            </main>
+          </Router>
 }
 
 export default App;

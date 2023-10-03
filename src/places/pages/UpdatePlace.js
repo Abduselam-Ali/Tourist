@@ -57,12 +57,12 @@ const UpdatePlace = () => {
         }catch(err){
 
            }
-        }
+        };
         fetchPlace();
     },[sendRequest,placeId, setFormData])
 
-      const placeUpdateSubmitHandler = async Event => {
-        Event.preventDefault();
+      const placeUpdateSubmitHandler = async event => {
+        event.preventDefault();
         try{
             await sendRequest(`http://localhost:5000/api/places/${placeId}`,
             'PATCH', 
@@ -98,7 +98,7 @@ const UpdatePlace = () => {
        return (
         <React.Fragment>
         <ErrorModal error={error} onClear={clearError}/>
-         {!isLoading && loadedPlace && 
+         {!isLoading && loadedPlace && (
         <form className="place-form" onSubmit={placeUpdateSubmitHandler}>
         <Input 
             id="title"
@@ -123,7 +123,7 @@ const UpdatePlace = () => {
         />
         <Button type="submit" disabled={!formState.isValid}>Update Place</Button>
 
-        </form> }
+        </form> )}
         </React.Fragment>
        )
      

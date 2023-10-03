@@ -5,10 +5,9 @@ import Card from '../../shared/components/UIElements/Card';
 import './UsersList.css';
  
 const UsersList = props => {
-    const { items = [] } = props
-    
+       
         // checking whether its an array or not and have some items in it
-        if (!Array.isArray(items) || items.length === 0) {
+        if (props.items.length === 0) {
             return (
               
                 <div className="center">
@@ -21,8 +20,7 @@ const UsersList = props => {
         }
         return (
             <ul className="users-list">
-              {props.items.map((user,index) => {
-                return (
+              {props.items.map(user => (
                 <UserItem
                   key={user.id}
                   id={user.id}
@@ -30,8 +28,7 @@ const UsersList = props => {
                   name={user.name}
                   placeCount={user.places.length}
                 />
-              )
-              } )}
+        ))};
             </ul>
           );
     };

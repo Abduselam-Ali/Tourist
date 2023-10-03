@@ -12,7 +12,8 @@ const Users = () => {
     useEffect(() => {
     const fetchUsers = async () => {
         try{
-            const responseData = await sendRequest('http://localhost:5000/api/users');
+            const responseData = await sendRequest(
+                'http://localhost:5000/api/users');
            
             setLoadedUsers(responseData.users);
         }catch(err){
@@ -26,11 +27,11 @@ const Users = () => {
         <React.Fragment>
         <ErrorModal error={error} onClear={clearError} />
         
-        {isLoading && <div className ="center" >
+        {isLoading && (<div className ="center" >
                             <LoadingSpinner />
-                                </div>}
+                                </div> )}
         
-       {!isLoading && !loadedUsers && <UsersList items={loadedUsers} />}
+       {!isLoading && loadedUsers && <UsersList items={loadedUsers} />}
         </React.Fragment>)
 };
 export default Users;

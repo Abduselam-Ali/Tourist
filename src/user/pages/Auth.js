@@ -1,9 +1,11 @@
 import React, {useState, useContext} from 'react';
+import axios from "axios"
 
 import Card from '../../shared/components/UIElements/Card';
 import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import { VALIDATOR_EMAIL,
          VALIDATOR_MINLENGTH,
@@ -38,7 +40,8 @@ const Auth = () => {
             setFormData(
                {
                   ...formState.inputs,
-                  name: undefined
+                  name: undefined,
+                  image: undefined
                }, 
                formState.inputs.email.isValid && formState.inputs.password.isValid 
                );
@@ -48,21 +51,24 @@ const Auth = () => {
             name:{
                value:'',
                isValid:false
+            },
+            image:{
+               value: null,
+               isValid: false
             }
          }, false
          );
       }
       setIsLoginMode(prevMode => !prevMode)
    };
-  const authSubmitHandler = async Event => {
-   Event.preventDefault();
+  const authSubmitHandler = async event => {
+   event.preventDefault();
    
    //send http request with the fetch api provided by modern java script
    //or it can be done by using axios  
    if(isLoginMode){
       try{
-         
-       const responseData = await sendRequest(
+          const responseData = await sendRequest(
          'http://localhost:5000/api/users/login',
          'POST',
          JSON.stringify({
@@ -75,26 +81,30 @@ const Auth = () => {
          );
          
         auth.login(responseData.user.id);
-      }catch(err){
-       }
-   }
-   else{
+      }catch(err){}
+   }else{
       try{
-         
-         const responseData = await sendRequest('http://localhost:5000/api/users/signup',
-            'POST',
-            JSON.stringify({
-               name: formState.inputs.name.value,
-               email: formState.inputs.email.value,
-               password: formState.inputs.password.value
-            }),
-            {
-             'Content-Type':'application/json'  
-            });
+           const formData = new FormData();
+           formData.append('email',formState.inputs.email.value);
+           formData.append('name',formState.inputs.name.value);
+           formData.append('password',formState.inputs.password.value);
+           formData.append('image',formState.inputs.image.value);
         
-        auth.login(responseData.user.id);
+           axios
+               .post('http://localhost:5000/api/users/signup',formData,{})
+               .then((res) => {
+                  console.log(res);
+
+               });
+         //   const responseData = await sendRequest(
+         //    'http://localhost:5000/api/users/signup',
+         //    'POST',
+         //    formData
+         //    );
+      //       console.log('sign up taen place--------------');
+      //   auth.login(responseData.user.id);
       }catch(err){
-       
+       console.log('something--------------');
       }
    }
 
@@ -107,7 +117,7 @@ const Auth = () => {
    <h2>Login Required</h2>
    <hr />
    <form onSubmit={authSubmitHandler}>
-     {!isLoginMode && <Input 
+     {!isLoginMode && (<Input 
         element="input"
         id="name"
         type="text"
@@ -115,7 +125,10 @@ const Auth = () => {
         validators={[VALIDATOR_REQUIRE()]}
         errorText="Please enter your user name" 
         onInput={inputHandler}
-     />}
+     /> )}
+     {!isLoginMode && ( 
+      <ImageUpload center id="image" onInput={inputHandler} />
+ )}
      <Input
         element="input"
         id="email"
@@ -130,11 +143,11 @@ const Auth = () => {
         id="password"
         type="password"
         label="Password"
-        validators={[VALIDATOR_MINLENGTH(5)]}
-        errorText="Please enter your password (atleast 5 character)." 
+        validators={[VALIDATOR_MINLENGTH(6)]}
+        errorText="Please enter your password (atleast 6 character)." 
         onInput={inputHandler}
         />
-        <Button type="submit" disable ={!formState.isValid}>
+        <Button type="submit" disabled ={!formState.isValid}>
         {isLoginMode ?  'Login' : 'Signup' }
         </Button>
    </form>

@@ -5,25 +5,23 @@ import PlaceList from "../components/PlaceList";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import { useHttpClient } from "../../shared/hooks/http-hook";
-const UserPlaces = () =>{
-
-    const [loadedPlaces, setLoadedPlaces ] = useState()
-
-    const {isLoading, error, sendRequest, clearError}= useHttpClient();
+const UserPlaces = () => {
+    const [loadedPlaces, setLoadedPlaces] = useState();
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  
     const userId = useParams().userId;
+  
     useEffect(() => {
-        try{
-            const fetchPlaces = async () => {
-                const responseData = await sendRequest(
-                    `http://localhost:5000/api/places/user/${userId}`
-                );
-                setLoadedPlaces(responseData.places)
-            }
-
-        }catch{
-
-        }
-    },[sendRequest, userId]);
+      const fetchPlaces = async () => {
+        try {
+          const responseData = await sendRequest(
+            `http://localhost:5000/api/places/user/${userId}`
+          );
+          setLoadedPlaces(responseData.places);
+        } catch (err) {}
+      };
+      fetchPlaces();
+    }, [sendRequest, userId]);
 
     const placeDeleteHandler = (deletedPlaceId) => {
             setLoadedPlaces(prevPlaces => 

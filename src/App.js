@@ -15,7 +15,7 @@ function App () {
     const [isLoggedIn, setIsLoggedIn]= useState(false);
     const [userId, setUserId] = useState(false);
 
-    const login = useCallback((uid) => {
+    const login = useCallback( uid => {
         setIsLoggedIn(true);
         setUserId(uid);
     },[]);
@@ -53,7 +53,7 @@ function App () {
                 <Route path="/" exact>
                 <Users />
             </Route>
-            <Route path='/:userId/places' exact>
+            <Route path="/:userId/places" exact>
                 <UserPlaces />
             </Route>
             <Route path="/auth">
@@ -61,7 +61,7 @@ function App () {
             </Route>
             <Redirect to ="/auth" />
             </Switch>
-        )
+        );
     }
 
   return (

@@ -10,21 +10,21 @@ export const useHttpClient = () =>{
             url, 
             method = 'GET' , 
             body= null, 
-            headers = {}
-        ) => {
+            headers = {}) => {
+
             setIsLoading(true);
-            const httpAbortCtrll = new AbortController()
-            activeHttpRequests.current.push(httpAbortCtrll);
+            const httpAbortCtrl = new AbortController()
+            activeHttpRequests.current.push(httpAbortCtrl);
             try{
                  const response= await fetch(url, {
                     method,
                     body,
                     headers,
-                    signal:httpAbortCtrll.signal
+                    signal:httpAbortCtrl.signal
                 });
             const responseData = await response.json();
                 activeHttpRequests.current = activeHttpRequests.current.filter(
-                    reqCtrl => reqCtrl !== httpAbortCtrll)
+                    reqCtrl => reqCtrl !== httpAbortCtrl)
 
             if(!response.ok)
             {
@@ -44,7 +44,7 @@ export const useHttpClient = () =>{
         }   
     useEffect (() => {
         return () => {
-           activeHttpRequests.current.forEach(abortctrl => abortctrl.abort()) 
+           activeHttpRequests.current.forEach(abortCtrl => abortCtrl.abort()) 
         }
     },[])
     return {isLoading, error, sendRequest, clearError}    

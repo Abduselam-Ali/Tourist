@@ -83,29 +83,29 @@ const Auth = () => {
         auth.login(responseData.user.id);
       }catch(err){}
    }else{
-      try{
+    //  try{
            const formData = new FormData();
-           formData.append('email',formState.inputs.email.value);
-           formData.append('name',formState.inputs.name.value);
-           formData.append('password',formState.inputs.password.value);
-           formData.append('image',formState.inputs.image.value);
+           formData.append('email', formState.inputs.email.value);
+           formData.append('name', formState.inputs.name.value);
+           formData.append('password', formState.inputs.password.value);
+           formData.append('image', formState.inputs.image.value);
         
            axios
-               .post('http://localhost:5000/api/users/signup',formData,{})
+               .post('http://localhost:5000/api/users/signup',{},formData)
                .then((res) => {
                   console.log(res);
 
                });
-         //   const responseData = await sendRequest(
-         //    'http://localhost:5000/api/users/signup',
-         //    'POST',
-         //    formData
-         //    );
-      //       console.log('sign up taen place--------------');
-      //   auth.login(responseData.user.id);
-      }catch(err){
-       console.log('something--------------');
-      }
+   //        await sendRequest(
+   //          'http://localhost:5000/api/users/signup',
+   //          'POST',
+   //          formData
+   //          );
+   //          console.log('sign up taen place--------------');
+   //   // auth.login(responseData.user.id);
+   //    }catch(err){
+   //     console.log('something--------------');
+   //    }
    }
 
   };

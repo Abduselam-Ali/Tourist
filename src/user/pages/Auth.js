@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react';
-import axios from "axios"
+
 
 import Card from '../../shared/components/UIElements/Card';
 import Input from '../../shared/components/FormElements/Input';
@@ -63,7 +63,7 @@ const Auth = () => {
    };
   const authSubmitHandler = async event => {
    event.preventDefault();
-   
+   console.log(formState.inputs);
    //send http request with the fetch api provided by modern java script
    //or it can be done by using axios  
    if(isLoginMode){
@@ -83,29 +83,20 @@ const Auth = () => {
         auth.login(responseData.user.id);
       }catch(err){}
    }else{
-    //  try{
+    try{
            const formData = new FormData();
            formData.append('email', formState.inputs.email.value);
            formData.append('name', formState.inputs.name.value);
            formData.append('password', formState.inputs.password.value);
            formData.append('image', formState.inputs.image.value);
         
-           axios
-               .post('http://localhost:5000/api/users/signup',{},formData)
-               .then((res) => {
-                  console.log(res);
-
-               });
-   //        await sendRequest(
-   //          'http://localhost:5000/api/users/signup',
-   //          'POST',
-   //          formData
-   //          );
-   //          console.log('sign up taen place--------------');
-   //   // auth.login(responseData.user.id);
-   //    }catch(err){
-   //     console.log('something--------------');
-   //    }
+          let responseData = await sendRequest(
+            'http://localhost:5000/api/users/signup',
+            'POST',
+            formData);
+          
+       auth.login(responseData.user.id);
+    }catch(err){}
    }
 
   };
@@ -113,7 +104,7 @@ const Auth = () => {
    <React.Fragment>
    <ErrorModal error={error} onClear= {clearError} />
    <Card className="authentication">
-   {isLoading && <LoadingSpinner asOverlay />}
+   {isLoading && <LoadingSpinner asOverlay/>}
    <h2>Login Required</h2>
    <hr />
    <form onSubmit={authSubmitHandler}>
@@ -127,8 +118,13 @@ const Auth = () => {
         onInput={inputHandler}
      /> )}
      {!isLoginMode && ( 
-      <ImageUpload center id="image" onInput={inputHandler} />
- )}
+      <ImageUpload 
+         center 
+         id="image" 
+         onInput={inputHandler} 
+         errorText="Please provide an image." 
+         />
+      )}
      <Input
         element="input"
         id="email"

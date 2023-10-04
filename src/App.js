@@ -1,6 +1,10 @@
 import React, {useState, useCallback} from 'react';
-import {BrowserRouter as Router, Redirect, Switch} from 'react-router-dom';
-import { Route } from 'react-router-dom/cjs/react-router-dom.min';
+import {
+    BrowserRouter as Router, 
+    Route,
+    Redirect,
+    Switch
+    } from 'react-router-dom';
 
 import Users from './user/pages/Users';
 import Auth from './user/pages/Auth';
@@ -10,7 +14,7 @@ import UpdatePlace from './places/pages/UpdatePlace';
 import MainNavigation from './shared/components/Navigation/MainNavigation';
 import { AuthContext } from './shared/context/auth-context';
 
-function App () {
+const App = () => {
 
     const [isLoggedIn, setIsLoggedIn]= useState(false);
     const [userId, setUserId] = useState(false);
@@ -21,7 +25,7 @@ function App () {
     },[]);
     const logout = useCallback(() => {
         setIsLoggedIn(false);
-        setUserId(null);
+        setUserId(false);
     },[]);
 
     let routes;
@@ -33,18 +37,18 @@ function App () {
             <Route path="/" exact>
             <Users />
         </Route>
-        <Route path='/:userId/places' exact>
+        <Route path="/:userId/places" exact>
             <UserPlaces />
         </Route>
         <Route path="/places/new" exact>
                 <NewPlace />
             </Route>
-            <Route path="/places/:placeId" exact>
+            <Route path="/places/:placeId" >
                 <UpdatePlace />
             </Route>
 
         <Redirect to ="/" />
-        </Switch>)
+        </Switch>);
     }
     else
     {
@@ -65,11 +69,13 @@ function App () {
     }
 
   return (
-        <AuthContext.Provider value= {
-            {isLoggedIn: isLoggedIn, 
-            userId:userId,
-            login:login, 
-            logout:logout}}>
+        <AuthContext.Provider 
+        value= {{
+            isLoggedIn: isLoggedIn, 
+            userId: userId,
+            login: login, 
+            logout: logout
+        }}>
         <Router>
         <MainNavigation />
             <main>

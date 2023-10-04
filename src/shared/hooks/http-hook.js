@@ -2,7 +2,8 @@ import {useState, useCallback, useRef, useEffect } from 'react';
 
 export const useHttpClient = () =>{
         const [isLoading, setIsLoading] = useState(false);
-        const [error, setError] = useState();
+        const [isLoadingL, setIsLoadingL] = useState(true);
+        const [error, setError] = useState(null);
 
         const activeHttpRequests = useRef([]);
 
@@ -12,7 +13,8 @@ export const useHttpClient = () =>{
             body= null, 
             headers = {}) => {
 
-            setIsLoading(true);
+            setIsLoading(false);
+            setIsLoadingL(false);
             const httpAbortCtrl = new AbortController()
             activeHttpRequests.current.push(httpAbortCtrl);
             try{
@@ -31,10 +33,13 @@ export const useHttpClient = () =>{
             throw new Error(responseData.message);
             }
             setIsLoading(false);
+            setIsLoadingL(false);
+            setError(null);
             return responseData;
             }catch(err){
                 setError(err.message)
                 setIsLoading(false);
+                setIsLoadingL(false);
                 throw err;
             }
               
@@ -47,5 +52,5 @@ export const useHttpClient = () =>{
            activeHttpRequests.current.forEach(abortCtrl => abortCtrl.abort()) 
         }
     },[])
-    return {isLoading, error, sendRequest, clearError}    
+    return {isLoading, isLoadingL, error, sendRequest, clearError}    
 };

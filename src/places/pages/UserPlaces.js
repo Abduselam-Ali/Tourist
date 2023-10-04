@@ -7,7 +7,7 @@ import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 const UserPlaces = () => {
     const [loadedPlaces, setLoadedPlaces] = useState();
-    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+    const { isLoadingL, error, sendRequest, clearError } = useHttpClient();
   
     const userId = useParams().userId;
   
@@ -30,12 +30,14 @@ const UserPlaces = () => {
 
     return (<React.Fragment>
         <ErrorModal error ={error} onClear={clearError}/>
-        {isLoading && <div className="center">
+        {isLoadingL && (<div className="center">
         <LoadingSpinner asOverlay />
-            </div>}
-        {!isLoading && loadedPlaces && <PlaceList items={loadedPlaces} onDeletePlace={placeDeleteHandler}/>}
+            </div>)}
+        {!isLoadingL && loadedPlaces && (
+          <PlaceList items={loadedPlaces} onDeletePlace={placeDeleteHandler}/>
+          )}
         </React.Fragment>
-        )
+        );
 }
 
 export default UserPlaces;
